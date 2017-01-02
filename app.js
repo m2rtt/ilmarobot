@@ -363,6 +363,7 @@ function getYldineIlm(linn){
         function getIlm(err, response, body){
           if(!err && response.statusCode < 400){
             var retData = JSON.parse(body);
+            console.log(retData);
             return retData;
           }
           else{
