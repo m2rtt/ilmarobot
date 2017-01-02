@@ -15,6 +15,7 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),
+  punycode = require('punycode'),
   request = require('request');
 
 var app = express();
@@ -292,7 +293,7 @@ function receivedMessage(event) {
       var str = messageText.match(/[Ll]inn\w*/);
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
       dict[senderID]['linn'] = linn;
-      getYldineIlm(linn, senderID);
+      getYldineIlm(punycode.encode(linn), senderID);
     }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
