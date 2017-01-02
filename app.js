@@ -24,6 +24,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
+var dict = {};
 /*
  * Be sure to setup your config values before running this code. You can 
  * set them using environment variables or modifying the config file in /config.
@@ -220,7 +221,9 @@ function receivedMessage(event) {
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-
+  if (dict[senderID] == undefined) {
+    dict[senderID] = {};
+  }
   console.log("Received message for user %d and page %d at %d with message:", 
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
@@ -250,7 +253,8 @@ function receivedMessage(event) {
   }
 
   if (messageText) {
-
+    if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/))
+      sendGifMessage(senderID);
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
