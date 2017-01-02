@@ -377,9 +377,8 @@ function receivedMessage(event) {
   }
 }
 function kontrollLaused(messageText, senderID) {
-  var response = ''; 
+  var response = 'Ma ei saa teist aru'; 
   var check = false;
-  response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
       if (messageText.match(/ilm/)) {
       dict[senderID]['viimane'] = 'ilm';
       if (dict[senderID]['linn'] == undefined)
@@ -471,7 +470,8 @@ function kontrollLaused(messageText, senderID) {
         check = true;
       }
     }
-       
+    if (response == 'Ma ei saa teist aru')
+      response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     sendTextMessage(senderID, response);
 }
 function getYldineIlm(ilm, linn, aeg, uid) {
