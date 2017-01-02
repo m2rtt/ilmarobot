@@ -251,24 +251,31 @@ function receivedMessage(event) {
     return;
   }
   var response = "";
+  var check = false;
   if (messageText) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/))
       sendTextMessage(senderID, "Tere!" );
 
     if (messageText.match(/täna|hetkel|praegu|nüüd/)) {
       dict[senderID]['aeg'] = 'hetkel';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
     }
     if (messageText.match(/õhtu|öö/)) {
       dict[senderID]['aeg'] = 'õhtu';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
     }
     if (messageText.match(/lõuna|päev/)) {
       dict[senderID]['aeg'] = 'päev';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
     }
     if (messageText.match(/homme|homne/)) {
       dict[senderID]['aeg'] = 'hommepäev';
@@ -276,8 +283,10 @@ function receivedMessage(event) {
         dict[senderID]['aeg'] = 'hommehommik';
       if (messageText.match(/õhtu|öö/))
         dict[senderID]['aeg'] = 'hommeõhtu';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
     }
     if (messageText.match(/üle(homme|homne)/)) {
       dict[senderID]['aeg'] = 'ülehommepäev';
@@ -285,8 +294,10 @@ function receivedMessage(event) {
         dict[senderID]['aeg'] = 'ülehommehommik';
       if (messageText.match(/õhtu|öö/))
         dict[senderID]['aeg'] = 'ülehommeõhtu';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
     }
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
@@ -296,8 +307,11 @@ function receivedMessage(event) {
       getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
         dict[senderID]['ilm'] = cb;
         kontrollLaused(messageText, senderID);
+        check = false;
       });
     }
+    if (check)
+      sendTextMessage(senderID, response);
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -356,10 +370,10 @@ function receivedMessage(event) {
         break;
 
       default:
-        sendTextMessage(senderID, messageText);
+        sendTextMessage(senderID, "Message with attachment received");
     }
   } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
+    sendTypingOff(senderID);
   }
 }
 function kontrollLaused(messageText, senderID) {
