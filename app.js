@@ -297,15 +297,15 @@ function receivedMessage(event) {
     }
     if (messageText.match(/ilm/)) {
       dict[senderID]['viimane'] = 'ilm';
-      if (dict[senderID]['linn'] != undefined)
-        response = "Täpsustage linna nimi."
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
       else
         response = getIlmText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['aeg'])
     }
     if (messageText.match(/(õhu)?niiskus/)) {
       dict[senderID]['viimane'] = 'õhuniiskus';
-      if (dict[senderID]['linn'] != undefined)
-        response = "Täpsustage linna nimi."
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
       else
         response = getÕhuniiskusText(dict[senderID]['linn'],
                     dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['humidity'],
@@ -313,8 +313,8 @@ function receivedMessage(event) {
     }
     if (messageText.match(/temperatuur|kraad|sooja|külm|soe/)) {
       dict[senderID]['viimane'] = 'temperatuur';
-      if (dict[senderID]['linn'] != undefined)
-        response = "Täpsustage linna nimi."
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
       else
         response = getTemperatuurText(dict[senderID]['linn'],
                     dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['temp'],
@@ -322,8 +322,8 @@ function receivedMessage(event) {
     }
     if (messageText.match(/(õhu)?rõhk/)) {
       dict[senderID]['viimane'] = 'õhurõhk';
-      if (dict[senderID]['linn'] != undefined)
-        response = "Täpsustage linna nimi."
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
       else
         response = getÕhurõhkText(dict[senderID]['linn'],
                     dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['pressure'],
@@ -331,14 +331,14 @@ function receivedMessage(event) {
     }
     if (messageText.match(/tuul/)) {
       dict[senderID]['viimane'] = 'tuul';
-      if (messageText.match(/suun/)) {
+      if (messageText.match(/suun.*/)) {
         dict[senderID]['viimane'] = 'tuulesuund';
         if (messageText.match(/kiirus|kiire/))
           dict[senderID]['viimane'] = 'tuul';
       }
       if (messageText.match(/kiirus|kiire/) && !messageText.match(/suun/))
         dict[senderID]['viimane'] = 'tuulekiirus';
-      if (dict[senderID]['linn'] != undefined)
+      if (dict[senderID]['linn'] == undefined)
         response = "Täpsustage linna nimi."
       else
         response = getTuulText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['viimane'], dict[senderID]['aeg'], senderID)
