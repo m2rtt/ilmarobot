@@ -299,6 +299,8 @@ function receivedMessage(event) {
         check = true;
       }
     }
+    if(dict[senderID]['linn'] != undefined)
+      kontrollLaused(messageText, senderID);
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
