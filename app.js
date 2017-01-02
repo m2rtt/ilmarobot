@@ -308,7 +308,10 @@ function receivedMessage(event) {
       //getIlmJSON(encodeURIComponent(linn), senderID);
       getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
         dict[senderID]['ilm'] = cb;
-        kontrollLaused(messageText, senderID);
+        if(!cb)
+          sendTextMessage(senderID, "ilmnes probleem");
+        else
+          kontrollLaused(messageText, senderID);
         check = false;
       });
     }
