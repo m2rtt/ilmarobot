@@ -257,17 +257,17 @@ function receivedMessage(event) {
 
     if (messageText.match(/täna|hetkel|praegu|nüüd/)) {
       dict[senderID]['aeg'] = 'hetkel';
-      if (dict[senderID]['linn'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     }
     if (messageText.match(/õhtu|öö/)) {
       dict[senderID]['aeg'] = 'õhtu';
-      if (dict[senderID]['linn'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     }
     if (messageText.match(/lõuna|päev/)) {
       dict[senderID]['aeg'] = 'päev';
-      if (dict[senderID]['linn'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     }
     if (messageText.match(/homme|homne/)) {
@@ -276,7 +276,7 @@ function receivedMessage(event) {
         dict[senderID]['aeg'] = 'hommehommik';
       if (messageText.match(/õhtu|öö/))
         dict[senderID]['aeg'] = 'hommeõhtu';
-      if (dict[senderID]['linn'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     }
     if (messageText.match(/üle(homme|homne)/)) {
@@ -285,7 +285,7 @@ function receivedMessage(event) {
         dict[senderID]['aeg'] = 'ülehommehommik';
       if (messageText.match(/õhtu|öö/))
         dict[senderID]['aeg'] = 'ülehommeõhtu';
-      if (dict[senderID]['linn'] != undefined)
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined)
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     }
     if (messageText.match(/[Ll]inn\w*/)) {
@@ -293,57 +293,12 @@ function receivedMessage(event) {
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
       dict[senderID]['linn'] = linn;
       //getIlmJSON(encodeURIComponent(linn), senderID);
-      getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {console.log(cb)})
+      getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
+        dict[senderID]['ilm'] = cb;
+        kontrollLaused(messageText);
+      });
     }
-    if (messageText.match(/ilm/)) {
-      dict[senderID]['viimane'] = 'ilm';
-      if (dict[senderID]['linn'] == undefined)
-        response = "Täpsustage linna nimi.";
-      else
-        response = getIlmText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['aeg'])
-    }
-    if (messageText.match(/(õhu)?niiskus/)) {
-      dict[senderID]['viimane'] = 'õhuniiskus';
-      if (dict[senderID]['linn'] == undefined)
-        response = "Täpsustage linna nimi.";
-      else
-        response = getÕhuniiskusText(dict[senderID]['linn'],
-                    dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['humidity'],
-                    dict[senderID]['aeg']);    
-    }
-    if (messageText.match(/temperatuur|kraad|sooja|külm|soe/)) {
-      dict[senderID]['viimane'] = 'temperatuur';
-      if (dict[senderID]['linn'] == undefined)
-        response = "Täpsustage linna nimi.";
-      else
-        response = getTemperatuurText(dict[senderID]['linn'],
-                    dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['temp'],
-                    dict[senderID]['aeg']);        
-    }
-    if (messageText.match(/(õhu)?rõhk/)) {
-      dict[senderID]['viimane'] = 'õhurõhk';
-      if (dict[senderID]['linn'] == undefined)
-        response = "Täpsustage linna nimi.";
-      else
-        response = getÕhurõhkText(dict[senderID]['linn'],
-                    dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['pressure'],
-                    dict[senderID]['aeg']);    
-    }
-    if (messageText.match(/tuul/)) {
-      dict[senderID]['viimane'] = 'tuul';
-      if (messageText.match(/suun.*/)) {
-        dict[senderID]['viimane'] = 'tuulesuund';
-        if (messageText.match(/kiirus|kiire/))
-          dict[senderID]['viimane'] = 'tuul';
-      }
-      if (messageText.match(/kiirus|kiire/) && !messageText.match(/suun/))
-        dict[senderID]['viimane'] = 'tuulekiirus';
-      if (dict[senderID]['linn'] == undefined)
-        response = "Täpsustage linna nimi."
-      else
-        response = getTuulText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['viimane'], dict[senderID]['aeg'], senderID)
-    }
-    sendTextMessage(senderID, response);
+
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
@@ -406,6 +361,58 @@ function receivedMessage(event) {
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
+}
+function kontrollLaused(messageText) {
+  var response = '';
+      if (messageText.match(/ilm/)) {
+      dict[senderID]['viimane'] = 'ilm';
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
+      else
+        response = getIlmText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['aeg'])
+    }
+    if (messageText.match(/(õhu)?niiskus/)) {
+      dict[senderID]['viimane'] = 'õhuniiskus';
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
+      else
+        response = getÕhuniiskusText(dict[senderID]['linn'],
+                    dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['humidity'],
+                    dict[senderID]['aeg']);    
+    }
+    if (messageText.match(/temperatuur|kraad|sooja|külm|soe/)) {
+      dict[senderID]['viimane'] = 'temperatuur';
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
+      else
+        response = getTemperatuurText(dict[senderID]['linn'],
+                    dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['temp'],
+                    dict[senderID]['aeg']);        
+    }
+    if (messageText.match(/(õhu)?rõhk/)) {
+      dict[senderID]['viimane'] = 'õhurõhk';
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi.";
+      else
+        response = getÕhurõhkText(dict[senderID]['linn'],
+                    dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['pressure'],
+                    dict[senderID]['aeg']);    
+    }
+    if (messageText.match(/tuul/)) {
+      dict[senderID]['viimane'] = 'tuul';
+      if (messageText.match(/suun.*/)) {
+        dict[senderID]['viimane'] = 'tuulesuund';
+        if (messageText.match(/kiirus|kiire/))
+          dict[senderID]['viimane'] = 'tuul';
+      }
+      if (messageText.match(/kiirus|kiire/) && !messageText.match(/suun/))
+        dict[senderID]['viimane'] = 'tuulekiirus';
+      if (dict[senderID]['linn'] == undefined)
+        response = "Täpsustage linna nimi."
+      else
+        response = getTuulText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['viimane'], dict[senderID]['aeg'], senderID)
+    }
+    sendTextMessage(senderID, response);
 }
 function getYldineIlm(ilm, linn, aeg, uid) {
   var i = getAegIndex(ilm, aeg);
