@@ -299,7 +299,7 @@ function receivedMessage(event) {
         check = true;
       }
     }
-    if(dict[senderID]['linn'] != undefined)
+    if(dict[senderID]['linn'] != undefined && !messageText.match(/[Ll]inn\w*/))
       kontrollLaused(messageText, senderID);
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
