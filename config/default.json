@@ -1,6 +1,6 @@
 {
-    "appSecret": "",
-    "pageAccessToken": "",
+    "appSecret": "cb10a9d2442de1a1eeaf4ca2754eac08",
+    "pageAccessToken": "EAAMlT0oJ5bgBAJdspg6nLywuSFLuRZC3BEZChXfZBw4ZB1rHoVygaEok91EfK5PQOOtzGE2Qp3ZCyVZAxBeZByzepdVa1sX16wQfZBo1pPCMYHapbZC0YiZCj2RhWeLT2bagJ7TsFYweFwZBMFwZAF8QqaWahpZA1t93cdkHoZBY3hxUELZCAZDZD",
     "validationToken": "jep_on_correct_asi",
-    "serverURL": ""
+    "serverURL": "ilmarobot.herokuapp.com"
 }
