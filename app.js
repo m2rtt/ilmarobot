@@ -377,7 +377,8 @@ function receivedMessage(event) {
   }
 }
 function kontrollLaused(messageText, senderID) {
-  var response = '';  
+  var response = ''; 
+  var check = false;
       if (messageText.match(/ilm/)) {
       dict[senderID]['viimane'] = 'ilm';
       if (dict[senderID]['linn'] == undefined)
