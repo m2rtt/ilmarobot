@@ -291,10 +291,9 @@ function receivedMessage(event) {
     }
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
-      console.log(str);
-      console.log(str[0], str.index + str[0].length);
-      console.log(messageText.substring(str.index + str[0].length - 1));
-      console.log(messageText.substring(str.index + str[0].length - 1).match(/[A-ZÕÄÖÜ]\w+((( |-)[A-ZÕÄÖÜa-zõäöü]\w+)*( |-)[A-ZÕÄÖÜ]\w+)?/));
+      console.log(dict[senderID]['linn']);
+      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ]\w+((( |-)[A-ZÕÄÖÜa-zõäöü]\w+)*( |-)[A-ZÕÄÖÜ]\w+)?/)[0];
+      dict[senderID]['linn'] = linn;
     }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
