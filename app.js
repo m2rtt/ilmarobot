@@ -295,7 +295,7 @@ function receivedMessage(event) {
       //getIlmJSON(encodeURIComponent(linn), senderID);
       getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
         dict[senderID]['ilm'] = cb;
-        kontrollLaused(messageText);
+        kontrollLaused(messageText, senderID);
       });
     }
 
@@ -362,7 +362,7 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
-function kontrollLaused(messageText) {
+function kontrollLaused(messageText, senderID) {
   var response = '';
       if (messageText.match(/ilm/)) {
       dict[senderID]['viimane'] = 'ilm';
