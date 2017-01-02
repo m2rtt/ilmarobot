@@ -292,7 +292,8 @@ function receivedMessage(event) {
       var str = messageText.match(/[Ll]inn\w*/);
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
       dict[senderID]['linn'] = linn;
-      getYldineIlm(encodeURIComponent(linn), senderID);
+      //getIlmJSON(encodeURIComponent(linn), senderID);
+      getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {console.log(cb)})
     }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -357,14 +358,16 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
-function getYldineIlm(linn, uid){
+function getIlmJSON(linn, uid, callback){
         var apiKey = 'da4e1bd6fbe3a91e49486215b059c31a';
+        sendTypingOn(senderID);
         request('http://api.openweathermap.org/data/2.5/forecast/city?APPID='+ apiKey +'&q='+ linn +'&units=metric', getIlm);
         function getIlm(err, response, body){
           if(!err && response.statusCode < 400){
             var retData = JSON.parse(body);
-            console.log(retData);
+            //console.log(retData);
             dict[uid]['ilm'] = retData;
+            callback(retData);
           }
           else{
             console.log(err);
