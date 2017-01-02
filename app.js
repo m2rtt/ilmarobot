@@ -655,7 +655,10 @@ function getIlmJSON(linn, uid, callback){
             var retData = JSON.parse(body);
             //console.log(retData);
             dict[uid]['ilm'] = retData;
-            callback(retData);
+            if (!retData)
+              sendTextMessage(uid, "Probleem");
+            else
+              callback(retData);
             sendTypingOff(uid);
           }
           else{
