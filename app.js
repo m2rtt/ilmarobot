@@ -360,7 +360,7 @@ function receivedMessage(event) {
 }
 function getIlmJSON(linn, uid, callback){
         var apiKey = 'da4e1bd6fbe3a91e49486215b059c31a';
-        sendTypingOn(senderID);
+        sendTypingOn(uid);
         request('http://api.openweathermap.org/data/2.5/forecast/city?APPID='+ apiKey +'&q='+ linn +'&units=metric', getIlm);
         function getIlm(err, response, body){
           if(!err && response.statusCode < 400){
@@ -368,6 +368,7 @@ function getIlmJSON(linn, uid, callback){
             //console.log(retData);
             dict[uid]['ilm'] = retData;
             callback(retData);
+            sendTypingOff(uid);
           }
           else{
             console.log(err);
