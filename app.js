@@ -9,17 +9,12 @@
 
 /* jshint node: true, devel: true */
 'use strict';
-var weatherconfig = {
-    units: 'metric',
-    apiKey: 'da4e1bd6fbe3a91e49486215b059c31a'
-};
 const 
   bodyParser = require('body-parser'),
   config = require('config'),
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),
-  weather = require('simple-weather')(weatherconfig),
   request = require('request');
 
 var app = express();
@@ -27,11 +22,7 @@ app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
-weather["v2.5"].current.byCityName("London").then(function(response) {
-    console.log(response);
-}).catch(function(err) {
-    console.error(err.stack);
-});
+
 var dict = {};
 /*
  * Be sure to setup your config values before running this code. You can 
@@ -301,6 +292,7 @@ function receivedMessage(event) {
       var str = messageText.match(/[Ll]inn\w*/);
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ]\w+((( |-)[A-ZÕÄÖÜa-zõäöü]\w+)*( |-)[A-ZÕÄÖÜ]\w+)?/)[0];
       dict[senderID]['linn'] = linn;
+      console.log(getYldineIlm(linn));
     }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -365,7 +357,20 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
-
+function getYldineIlm(linn){
+        var apiKey = 'da4e1bd6fbe3a91e49486215b059c31a';
+        request('http://api.openweathermap.org/data/2.5/forecast/daily?APPID='+ +'&q='+ linn +'&units=metric&cnt=3', getIlm);
+        function getIlm(err, response, body){
+          if(!err && response.statusCode < 400){
+            var retData = JSON.parse(body);
+            return retData;
+          }
+          else{
+            console.log(err);
+            console.log(response.statusCode);
+          }
+        }
+      };
 /*
  * Delivery Confirmation Event
  *
