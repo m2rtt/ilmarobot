@@ -429,7 +429,7 @@ function getYldineIlm(ilm, linn, aeg, uid) {
     res = getIlmText(linn, ilm, aeg);
   return res;
 }
-function getIlmText() {
+function getIlmText(linn, ilm, aeg) {
   var i = getAegIndex(ilm, aeg);
   var temp = ilm['list'][i]['main']['temp'];
   var kiirus = ilm['list'][i]['wind']['speed'];
