@@ -9,13 +9,17 @@
 
 /* jshint node: true, devel: true */
 'use strict';
-
+var config = {
+    units: 'metric',
+    apiKey: 'da4e1bd6fbe3a91e49486215b059c31a'
+};
 const 
   bodyParser = require('body-parser'),
   config = require('config'),
   crypto = require('crypto'),
   express = require('express'),
-  https = require('https'),  
+  https = require('https'),
+  weather = require('simple-weather')(config),
   request = require('request');
 
 var app = express();
@@ -23,7 +27,11 @@ app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
-
+weather["v2.5"].current.byCityName("London").then(function(response) {
+    console.log(response);
+}).catch(function(err) {
+    console.error(err.stack);
+});
 var dict = {};
 /*
  * Be sure to setup your config values before running this code. You can 
@@ -291,7 +299,6 @@ function receivedMessage(event) {
     }
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
-      console.log(dict[senderID]['linn']);
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ]\w+((( |-)[A-ZÕÄÖÜa-zõäöü]\w+)*( |-)[A-ZÕÄÖÜ]\w+)?/)[0];
       dict[senderID]['linn'] = linn;
     }
@@ -358,7 +365,6 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
-
 
 /*
  * Delivery Confirmation Event
