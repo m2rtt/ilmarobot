@@ -251,10 +251,49 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
-
+  var response = "";
   if (messageText) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/))
-      sendGifMessage(senderID);
+      sendTextMessage(senderID, "Tere!" );
+
+    if (messageText.match(/täna|hetkel|praegu|nüüd/)) {
+      dict[senderID]['aeg'] = 'hetkel';
+      if (dict[senderID]['linn'] != undefined)
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg']);
+    }
+    if (messageText.match(/õhtu|öö/)) {
+      dict[senderID]['aeg'] = 'õhtu';
+      if (dict[senderID]['linn'] != undefined)
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg']);
+    }
+    if (messageText.match(/lõuna|päev/)) {
+      dict[senderID]['aeg'] = 'päev';
+      if (dict[senderID]['linn'] != undefined)
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg']);
+    }
+    if (messageText.match(/homme|homne/)) {
+      dict[senderID]['aeg'] = 'hommepäev';
+      if (messageText.match(/hommik/))
+        dict[senderID]['aeg'] = 'hommehommik';
+      if (messageText.match(/õhtu|öö/))
+        dict[senderID]['aeg'] = 'hommeõhtu';
+      if (dict[senderID]['linn'] != undefined)
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg']);
+    }
+    if (messageText.match(/üle(homme|homne)/)) {
+      dict[senderID]['aeg'] = 'ülehommepäev';
+      if (messageText.match(/hommik/))
+        dict[senderID]['aeg'] = 'ülehommehommik';
+      if (messageText.match(/õhtu|öö/))
+        dict[senderID]['aeg'] = 'ülehommeõhtu';
+      if (dict[senderID]['linn'] != undefined)
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg']);
+    }
+    if (messageText.match(/[Ll]inn\w*/)) {
+      var str = messageText.match(/[Ll]inn\w*/);
+      console.log(str);
+      console.log(str[0], str[str.length - 2]);
+    }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
