@@ -370,7 +370,7 @@ function receivedMessage(event) {
         break;
 
       default:
-        sendTextMessage(senderID, "Message with attachment received");
+        sendTypingOff(senderID);
     }
   } else if (messageAttachments) {
     sendTypingOff(senderID);
@@ -378,6 +378,49 @@ function receivedMessage(event) {
 }
 function kontrollLaused(messageText, senderID) {
   var response = '';
+    if (messageText.match(/täna|hetkel|praegu|nüüd/)) {
+      dict[senderID]['aeg'] = 'hetkel';
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
+    }
+    if (messageText.match(/õhtu|öö/)) {
+      dict[senderID]['aeg'] = 'õhtu';
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
+    }
+    if (messageText.match(/lõuna|päev/)) {
+      dict[senderID]['aeg'] = 'päev';
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
+    }
+    if (messageText.match(/homme|homne/)) {
+      dict[senderID]['aeg'] = 'hommepäev';
+      if (messageText.match(/hommik/))
+        dict[senderID]['aeg'] = 'hommehommik';
+      if (messageText.match(/õhtu|öö/))
+        dict[senderID]['aeg'] = 'hommeõhtu';
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
+    }
+    if (messageText.match(/üle(homme|homne)/)) {
+      dict[senderID]['aeg'] = 'ülehommepäev';
+      if (messageText.match(/hommik/))
+        dict[senderID]['aeg'] = 'ülehommehommik';
+      if (messageText.match(/õhtu|öö/))
+        dict[senderID]['aeg'] = 'ülehommeõhtu';
+      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+        check = true;
+      }
+    }  
       if (messageText.match(/ilm/)) {
       dict[senderID]['viimane'] = 'ilm';
       if (dict[senderID]['linn'] == undefined)
