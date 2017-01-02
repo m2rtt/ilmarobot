@@ -290,7 +290,7 @@ function receivedMessage(event) {
     }
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
-      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ]\w[õäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü]\w[õäöü]+)*( |-)[A-ZÕÄÖÜ]\w[õäöü]+)?/)[0];
+      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
       dict[senderID]['linn'] = linn;
       getYldineIlm(linn, senderID);
     }
