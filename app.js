@@ -292,7 +292,7 @@ function receivedMessage(event) {
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
       console.log(str);
-      console.log(str[0], str[str.length - 2]);
+      console.log(str[0], str.index);
     }
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
