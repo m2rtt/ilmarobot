@@ -359,7 +359,7 @@ function receivedMessage(event) {
 }
 function getYldineIlm(linn){
         var apiKey = 'da4e1bd6fbe3a91e49486215b059c31a';
-        request('http://api.openweathermap.org/data/2.5/forecast/daily?APPID='+ +'&q='+ linn +'&units=metric&cnt=3', getIlm);
+        request('http://api.openweathermap.org/data/2.5/forecast/daily?APPID='+ apiKey +'&q='+ linn +'&units=metric&cnt=3', getIlm);
         function getIlm(err, response, body){
           if(!err && response.statusCode < 400){
             var retData = JSON.parse(body);
