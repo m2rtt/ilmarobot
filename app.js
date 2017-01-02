@@ -9,7 +9,7 @@
 
 /* jshint node: true, devel: true */
 'use strict';
-var config = {
+var weatherconfig = {
     units: 'metric',
     apiKey: 'da4e1bd6fbe3a91e49486215b059c31a'
 };
@@ -19,7 +19,7 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),
-  weather = require('simple-weather')(config),
+  weather = require('simple-weather')(weatherconfig),
   request = require('request');
 
 var app = express();
