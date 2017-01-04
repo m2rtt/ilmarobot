@@ -269,8 +269,10 @@ function receivedMessage(event) {
         dict[senderID]['ilm'] = cb;
         if(!cb)
           sendTextMessage(senderID, "ilmnes probleem");
-        else
+        else{
+          console.log(cb);
           kontrollLaused(messageText, senderID);
+        }
       });
       check = true;
     }
