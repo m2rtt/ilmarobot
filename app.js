@@ -253,10 +253,13 @@ function receivedMessage(event) {
   var response = "Huh?";
   var check = false;
   if (messageText) {
-    if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/))
+    if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/)) {
       sendTextMessage(senderID, "Tere!" );
-    if(dict[senderID]['linn'] != undefined && !messageText.match(/[Ll]inn\w*/))
+    }
+    if(dict[senderID]['linn'] != undefined && !messageText.match(/[Ll]inn\w*/)){
       kontrollLaused(messageText, senderID);
+      check = true;
+    }
     if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
@@ -269,7 +272,9 @@ function receivedMessage(event) {
         else
           kontrollLaused(messageText, senderID);
       });
-    } else {
+      check = true;
+    }
+    if (!check) {
       response = "Kui soovite teada ilma mõnes linnas, mainige ka linna nimi, näide: 'Milline tuleb homne ilm linnas Tartu'. \n";
       //sendTextMessage(senderID, response);
       response += "Veel märksõnu, mida kasutada saab: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
@@ -277,6 +282,7 @@ function receivedMessage(event) {
       response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul. ";
       sendTextMessage(senderID, response);
     }
+    check = false;
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
