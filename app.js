@@ -328,7 +328,7 @@ function receivedMessage(event) {
 }
 function getIlmateade(linn, uid, text) {
   getIlmJSON(encodeURIComponent(linn), uid, function(cb) {
-    while (!cb || !cb['list']){
+    if (!cb || !cb['list']){
       getIlmateade(linn, uid, text);
     }
     else{
