@@ -250,55 +250,12 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
-  var response = "";
+  var response = "Huh?";
   var check = false;
   if (messageText) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/))
       sendTextMessage(senderID, "Tere!" );
 
-    if (messageText.match(/täna|hetkel|praegu|nüüd/)) {
-      dict[senderID]['aeg'] = 'hetkel';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
-        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
-      }
-    }
-    if (messageText.match(/õhtu|öö/)) {
-      dict[senderID]['aeg'] = 'õhtu';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
-        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
-      }
-    }
-    if (messageText.match(/lõuna|päev/)) {
-      dict[senderID]['aeg'] = 'päev';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
-        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
-      }
-    }
-    if (messageText.match(/homme|homne/)) {
-      dict[senderID]['aeg'] = 'hommepäev';
-      if (messageText.match(/hommik/))
-        dict[senderID]['aeg'] = 'hommehommik';
-      if (messageText.match(/õhtu|öö/))
-        dict[senderID]['aeg'] = 'hommeõhtu';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
-        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
-      }
-    }
-    if (messageText.match(/üle(homme|homne)/)) {
-      dict[senderID]['aeg'] = 'ülehommepäev';
-      if (messageText.match(/hommik/))
-        dict[senderID]['aeg'] = 'ülehommehommik';
-      if (messageText.match(/õhtu|öö/))
-        dict[senderID]['aeg'] = 'ülehommeõhtu';
-      if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
-        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
-      }
-    }
     if(dict[senderID]['linn'] != undefined && !messageText.match(/[Ll]inn\w*/))
       kontrollLaused(messageText, senderID);
     if (messageText.match(/[Ll]inn\w*/)) {
@@ -308,11 +265,10 @@ function receivedMessage(event) {
       //getIlmJSON(encodeURIComponent(linn), senderID);
       getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
         dict[senderID]['ilm'] = cb;
-        if(cb == undefined)
+        if(!cb)
           sendTextMessage(senderID, "ilmnes probleem");
         else
           kontrollLaused(messageText, senderID);
-        check = false;
       });
     }
     if (check)
@@ -324,22 +280,6 @@ function receivedMessage(event) {
     switch (messageText) {
       case 'image':
         sendImageMessage(senderID);
-        break;
-
-      case 'gif':
-        sendGifMessage(senderID);
-        break;
-
-      case 'audio':
-        sendAudioMessage(senderID);
-        break;
-
-      case 'video':
-        sendVideoMessage(senderID);
-        break;
-
-      case 'file':
-        sendFileMessage(senderID);
         break;
 
       case 'button':
@@ -436,21 +376,18 @@ function kontrollLaused(messageText, senderID) {
       dict[senderID]['aeg'] = 'hetkel';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
       }
     }
     if (messageText.match(/õhtu|öö/)) {
       dict[senderID]['aeg'] = 'õhtu';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
       }
     }
     if (messageText.match(/lõuna|päev/)) {
       dict[senderID]['aeg'] = 'päev';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
       }
     }
     if (messageText.match(/homme|homne/)) {
@@ -461,7 +398,6 @@ function kontrollLaused(messageText, senderID) {
         dict[senderID]['aeg'] = 'hommeõhtu';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
-        check = true;
       }
     }
     if (messageText.match(/üle(homme|homne)/)) {
@@ -475,8 +411,8 @@ function kontrollLaused(messageText, senderID) {
         check = true;
       }
     }
-    if (response == 'Ma ei saa teist aru')
-      response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+    //if (response == 'Ma ei saa teist aru')
+    //  response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
     sendTextMessage(senderID, response);
 }
 function getYldineIlm(ilm, linn, aeg, uid) {
@@ -509,15 +445,15 @@ function getIlmText(linn, ilm, aeg) {
   return getAegText(aeg) + " linnas " + linn + t + "temperatuur on " + temp + " kraadi, puhub tuul " + getTuulesuund(tuulesuund) + " " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
 }
 function getÕhuniiskusText(linn, niiskus, aeg) {
-  return "Linnas " + linn + " on " + getAegText(aeg) + " õhuniiskust " + niiskus + "%";
+  return "Linnas " + linn + " on " + getAegText(aeg).toLowerCase() + " õhuniiskust " + niiskus + "%";
 }
 
 function getTemperatuurText(linn, temp, aeg) {
-  return "Linnas " + linn + " on " + getAegText(aeg) + " temperatuur " + temp + " kraadi";
+  return "Linnas " + linn + " on " + getAegText(aeg).toLowerCase() + " temperatuur " + temp + " kraadi";
 }
     
 function getÕhurõhkText(linn, pressure, aeg) {
-  return "Linnas " + linn + " on " + getAegText(aeg) + " õhurõhk " + pressure + " hPa";
+  return "Linnas " + linn + " on " + getAegText(aeg).toLowerCase() + " õhurõhk " + pressure + " hPa";
 }
 
 function getTuulText(linn, ilm, viimane, aeg, uid){
@@ -785,93 +721,6 @@ function sendImageMessage(recipientId) {
   callSendAPI(messageData);
 }
 
-/*
- * Send a Gif using the Send API.
- *
- */
-function sendGifMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "image",
-        payload: {
-          url: SERVER_URL + "/assets/instagram_logo.gif"
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-/*
- * Send audio using the Send API.
- *
- */
-function sendAudioMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "audio",
-        payload: {
-          url: SERVER_URL + "/assets/sample.mp3"
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-/*
- * Send a video using the Send API.
- *
- */
-function sendVideoMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "video",
-        payload: {
-          url: SERVER_URL + "/assets/allofus480.mov"
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-/*
- * Send a file using the Send API.
- *
- */
-function sendFileMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "file",
-        payload: {
-          url: SERVER_URL + "/assets/test.txt"
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
 
 /*
  * Send a text message using the Send API.
