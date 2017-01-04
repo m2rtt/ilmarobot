@@ -270,15 +270,13 @@ function receivedMessage(event) {
           kontrollLaused(messageText, senderID);
       });
     } else {
-      response = "Kui soovite teada ilma mõnes linnas, mainige ka linna nimi, näide: 'Milline tuleb homne ilm linnas Tartu";
-      sendTextMessage(senderID, response);
-      response = "Veel märksõnu, mida kasutada saab: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul.";
-      sendTextMessage(senderID, response);
-      response = "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
+      response = "Kui soovite teada ilma mõnes linnas, mainige ka linna nimi, näide: 'Milline tuleb homne ilm linnas Tartu'. \n";
+      //sendTextMessage(senderID, response);
+      response += "Veel märksõnu, mida kasutada saab: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
+      //sendTextMessage(senderID, response);
+      response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul. ";
       sendTextMessage(senderID, response);
     }
-    if (check)
-      sendTextMessage(senderID, response);
 
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
