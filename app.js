@@ -265,14 +265,8 @@ function receivedMessage(event) {
       var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
       dict[senderID]['linn'] = linn;
       //getIlmJSON(encodeURIComponent(linn), senderID);
-      getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
-        dict[senderID]['ilm'] = cb;
-        if(!cb || !cb['list'])
-          sendTextMessage(senderID, "ilmnes probleem");
-        else{
-          kontrollLaused(messageText, senderID);
-        }
-      });
+      getIlmateade(linn, senderID, messageText);
+
       check = true;
     }
     if (!check) {
@@ -331,6 +325,17 @@ function receivedMessage(event) {
   } else if (messageAttachments) {
     sendTypingOff(senderID);
   }
+}
+function getIlmateade(linn, uid, text) {
+  getIlmJSON(encodeURIComponent(linn), uid, function(cb) {
+    while (!cb || !cb['list']){
+      getIlmateade(linn, uid, text);
+    }
+    else{
+      dict[uid]['ilm'] = cb;
+      kontrollLaused(text, uid);
+    }
+  });
 }
 function kontrollLaused(messageText, senderID) {
   var response = 'Ma ei saa teist aru'; 
