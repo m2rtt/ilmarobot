@@ -267,10 +267,9 @@ function receivedMessage(event) {
       //getIlmJSON(encodeURIComponent(linn), senderID);
       getIlmJSON(encodeURIComponent(linn), senderID, function(cb) {
         dict[senderID]['ilm'] = cb;
-        if(!cb)
+        if(!cb || !cb['list'])
           sendTextMessage(senderID, "ilmnes probleem");
         else{
-          console.log(cb);
           kontrollLaused(messageText, senderID);
         }
       });
