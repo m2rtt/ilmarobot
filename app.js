@@ -329,6 +329,7 @@ function receivedMessage(event) {
 function getIlmateade(linn, uid, text) {
   getIlmJSON(encodeURIComponent(linn), uid, function(cb) {
     if (!cb || !cb['list']){
+      console.log("ilmateate hankimine vigane");
       getIlmateade(linn, uid, text);
     }
     else{
