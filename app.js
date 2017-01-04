@@ -222,7 +222,7 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
   if (dict[senderID] == undefined) {
-    dict[senderID] = {'aeg':'hetkel'};
+    dict[senderID] = {'aeg':'hetkel', 'x':0};
   }
   console.log("Received message for user %d and page %d at %d with message:", 
     senderID, recipientID, timeOfMessage);
@@ -287,8 +287,14 @@ function receivedMessage(event) {
 function getIlmateade(linn, uid, text) {
   getIlmJSON(encodeURIComponent(linn), uid, function(cb) {
     if (!cb || !cb['list']){
-      console.log("ilmateate hankimine vigane");
-      //getIlmateade(linn, uid, text);
+      if (dict[uid].x < 5){
+        dict[uid].x += 1;
+        console.log("ilmateate hankimine vigane");
+        getIlmateade(linn, uid, text);
+      } else {
+        dict[uid].x = 0;
+        sendTextMessage(uid, "Ilmateadet ei suutnud hankida. Proovige uuesti või veenduge, et linna nimi on korrektne.");
+      }
     }
     else{
       dict[uid]['ilm'] = cb;
