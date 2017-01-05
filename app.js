@@ -435,11 +435,11 @@ function getIlmText(linn, ilm, aeg) {
     tText = "sooja";
   else
     tText = "külma";
-  if (getIlmKirjeldus(ilm, i) == "")
+  if (getIlmKirjeldus(linn, ilm, i) == "")
     t == " ";
   else
-    t = " " + getIlmKirjeldus(ilm, i) + ", "
-  return getAegText(aeg) + linn + t + tText + " on " + Math.abs(temp) + " kraadi, puhub " + getTuulesuund(tuulesuund) + "tuul kiirusega " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
+    t = " " + getIlmKirjeldus(linn, ilm, i) + ", "
+  return getAegText(aeg) + " " + t + tText + " on " + Math.abs(temp) + " kraadi, puhub " + getTuulesuund(tuulesuund) + "tuul kiirusega " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
 }
 function getÕhuniiskusText(linn, niiskus, aeg) {
   return linn + " on " + getAegText(aeg).toLowerCase() + " õhuniiskust " + niiskus + "%";
@@ -491,24 +491,24 @@ function getTuulesuund(deg) {
       t = "loode";
     return t;
   }
-function getIlmKirjeldus(ilm, index) {
+function getIlmKirjeldus(linn ilm, index) {
   var desc = ilm['list'][index]['weather'][0]['main']
     if (desc == "Thunderstorm")
-        return "on äike";
+        return "on " + linn +" äike";
     if (desc == "Drizzle")
-        return "sajab uduvihma";
+        return "sajab " + linn + " uduvihma";
     if (desc == "Rain")
-        return "sajab vihma";
+        return "sajab " + linn + " vihma";
     if (desc == "Snow")
-        return "sajab lund";
+        return "sajab " + linn + " lund";
     if (desc == "Clouds")
-        return "on pilves";
+        return "on " + linn + " pilves ilm";
     if (desc == "Clear")
-        return "on selge ilm";
+        return "on " + linn + " selge taevas";
     if (desc == "Extreme")
-        return "on ekstreemsed olud";
+        return "on " + linn + " ekstreemsed olud";
     if (desc == "Atmosphere")
-        return "on udu"; //see ei ole kindlasti alati correct
+        return "on " + linn + " udu"; //see ei ole kindlasti alati correct
     else
         return "";
 }
