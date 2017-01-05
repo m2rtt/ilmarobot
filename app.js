@@ -256,7 +256,7 @@ function receivedMessage(event) {
       sendTextMessage(senderID, "Tere!\nKüsi minult ilma kohta Eesti asulates ja linnades. Tean öelda ilma nii tänase, homse kui ka ülehomse kohta." );
     }
     // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
-    if (messageText.substring(1).match(linnaPattern)) {
+    else if (messageText.substring(1).match(linnaPattern)) {
       var linn = messageText.substring(1).match(linnaPattern)[0];    
       getLinnanimi(linn, senderID, function(cb) {
         console.log("getLinnanimi callback: " + cb);
@@ -267,10 +267,10 @@ function receivedMessage(event) {
     else if(dict[senderID]['linn'] != undefined){
       kontrollLaused(messageText, senderID);
     }
-    if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
+    else if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
       sendTextMessage(senderID, "Nägemist!");
     }
-    if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
+    else if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
       sendTextMessage(senderID, "Pole tänu väärt, aitan alati");
     }
     else{
