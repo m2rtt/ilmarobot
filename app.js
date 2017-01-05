@@ -392,9 +392,10 @@ function kontrollLaused(messageText, senderID) {
         check = true;
       }
     }
-    if (response == 'Ma ei saa teist aru')
+    if (response == 'Ma ei saa teist aru'){
       response += "\nMärksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
       response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
+    }
     sendTextMessage(senderID, response);
 }
 function getYldineIlm(ilm, linn, aeg, uid) {
