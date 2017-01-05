@@ -307,7 +307,7 @@ function getIlmateade(orig, linn, uid, text) {
       if (dict[uid].x < 5){
         dict[uid].x += 1;
         console.log("ilmateate hankimine vigane");
-        getIlmateade(linn, uid, text);
+        getIlmateade(orig, linn, uid, text);
       } else {
         dict[uid].x = 0;
         sendTextMessage(uid, "Ilmateadet ei suutnud hankida. Proovige uuesti või veenduge, et linna nimi on korrektne.");
