@@ -459,7 +459,7 @@ function getTuulText(linn, ilm, viimane, aeg, uid){
   var kiirus = ilm['list'][getAegIndex(ilm, aeg)]['wind']['speed'];    
   var t = getTuulesuund(tuulesuund);
   if (dict[uid]['viimane'] == "tuulesuund")
-    response = linn + " puhub " + getAegText(aeg).toLowerCase() + +" " t + "tuul.";
+    response = linn + " puhub " + getAegText(aeg).toLowerCase() + " " + t + "tuul.";
   else if (dict[uid]['viimane'] == "tuul")
     response = linn + " puhub " + getAegText(aeg).toLowerCase() + " " + t + "tuul " + kiirus + " m/s";
   else if (dict[uid]['viimane'] == "tuulekiirus")
