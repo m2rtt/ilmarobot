@@ -255,7 +255,6 @@ function receivedMessage(event) {
   if (messageText) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/)) {
       sendTextMessage(senderID, "Tere!\nKüsi minult ilma kohta Eesti asulates ja linnades. Tean öelda ilma nii tänase, homse kui ka ülehomse kohta." );
-      check = true;
     }
     // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
     if (messageText.substring(1).match(linnaPattern)) {
@@ -265,8 +264,6 @@ function receivedMessage(event) {
         dict[senderID]['linn'] = linn;
         getIlmateade(linn, cb, senderID, messageText);
       });
-
-      check = true;
     }
     else if(dict[senderID]['linn'] != undefined){
       kontrollLaused(messageText, senderID);
