@@ -392,9 +392,13 @@ function kontrollLaused(messageText, senderID, linnChanged) {
         check = true;
       }
     }
-    if (response == 'Ma ei saa teist aru' && !linnChanged){
-      response += "\nMärksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
-      response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
+    if (response == 'Ma ei saa teist aru') {
+      if (!linnChanged){
+        response += "\nMärksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
+        response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
+      } else {
+        response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+      }
     }
     sendTextMessage(senderID, response);
 }
