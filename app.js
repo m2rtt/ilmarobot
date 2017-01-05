@@ -266,20 +266,21 @@ function receivedMessage(event) {
       var linn = messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];    
       getLinnanimi(linn, senderID, function(cb) {
         console.log("getLinnanimi callback: " + cb);
-        dict[senderID]['linn'] = cb;
-        getIlmateade(cb, senderID, messageText);
+        dict[senderID]['linn'] = linn;
+        getIlmateade(linn, cb, senderID, messageText);
       });
-      check = true;
-    }
-    else if (messageText.match(/[Ll]inn\w*/)) {
-      var str = messageText.match(/[Ll]inn\w*/);
-      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];
-      dict[senderID]['linn'] = linn;
-      //getIlmJSON(encodeURIComponent(linn), senderID);
-      getIlmateade(linn, senderID, messageText);
 
       check = true;
     }
+    // else if (messageText.match(/[Ll]inn\w*/)) {
+    //   var str = messageText.match(/[Ll]inn\w*/);
+    //   var linn = messageText.substring(str.index + str[0].length).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];
+    //   dict[senderID]['linn'] = linn;
+    //   //getIlmJSON(encodeURIComponent(linn), senderID);
+    //   getIlmateade(linn, senderID, messageText);
+
+    //   check = true;
+    // }
     if (!check) {
       response = "Kui soovite teada ilma mõnes linnas, mainige ka linna nimi, näide: 'Milline tuleb homne ilm linnas Tartu'. \n";
       //sendTextMessage(senderID, response);
@@ -294,7 +295,7 @@ function receivedMessage(event) {
     sendTypingOff(senderID);
   }
 }
-function getIlmateade(linn, uid, text) {
+function getIlmateade(orig, linn, uid, text) {
   getIlmJSON(linn, uid, function(cb) {
     if (!cb || !cb['list']){
       if (dict[uid].x < 5){
@@ -429,22 +430,32 @@ function getIlmText(linn, ilm, aeg) {
   var pressure = ilm['list'][i]['main']['pressure'];
   var niiskus = ilm['list'][i]['main']['humidity'];
   var t = "";
+  var tText = "";
+  if (temp >= 0)
+    tText = "sooja";
+  else
+    tText = "külma";
   if (getIlmKirjeldus(ilm, i) == "")
     t == " ";
   else
     t = " " + getIlmKirjeldus(ilm, i) + ", "
-  return getAegText(aeg) + " linnas " + linn + t + "temperatuur on " + temp + " kraadi, puhub tuul " + getTuulesuund(tuulesuund) + " " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
+  return getAegText(aeg) + linn + t + tText + " on " + Math.abs(temp) + " kraadi, puhub " + getTuulesuund(tuulesuund) + "tuul kiirusega " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
 }
 function getÕhuniiskusText(linn, niiskus, aeg) {
-  return "Linnas " + linn + " on " + getAegText(aeg).toLowerCase() + " õhuniiskust " + niiskus + "%";
+  return linn + " on " + getAegText(aeg).toLowerCase() + " õhuniiskust " + niiskus + "%";
 }
 
 function getTemperatuurText(linn, temp, aeg) {
-  return "Linnas " + linn + " on " + getAegText(aeg).toLowerCase() + " temperatuur " + temp + " kraadi";
+  var t = "";
+  if (temp >= 0)
+    t = "sooja";
+  else
+    t = "külma";
+  return linn + " on " + getAegText(aeg).toLowerCase() + Math.abs(temp) + " kraadi " + t;
 }
     
 function getÕhurõhkText(linn, pressure, aeg) {
-  return "Linnas " + linn + " on " + getAegText(aeg).toLowerCase() + " õhurõhk " + pressure + " hPa";
+  return linn + " on " + getAegText(aeg).toLowerCase() + " õhurõhk " + pressure + " hPa";
 }
 
 function getTuulText(linn, ilm, viimane, aeg, uid){
@@ -453,31 +464,31 @@ function getTuulText(linn, ilm, viimane, aeg, uid){
   var kiirus = ilm['list'][getAegIndex(ilm, aeg)]['wind']['speed'];    
   var t = getTuulesuund(tuulesuund);
   if (dict[uid]['viimane'] == "tuulesuund")
-    response = "Linnas " + linn + " puhub " + getAegText(aeg) + " tuul " + t;
+    response = linn + " puhub " + getAegText(aeg).toLowerCase() + t + "tuul.";
   else if (dict[uid]['viimane'] == "tuul")
-    response = "Linnas " + linn + " puhub " + getAegText(aeg) + " tuul " + t + " " + kiirus + " m/s";
+    response = linn + " puhub " + getAegText(aeg).toLowerCase() + t + "tuul " + kiirus + " m/s";
   else if (dict[uid]['viimane'] == "tuulekiirus")
-    response = "Linnas " + linn + " on " + getAegText(aeg) + " tuulekiirus " + kiirus + " m/s";
+    response = linn + " puhub " + getAegText(aeg).toLowerCase() + " tuul kiirusega " + kiirus + " m/s";
   return response;
 }
 function getTuulesuund(deg) {
   var t = "";
     if (deg >= 337.5 && deg <= 360.0 || deg < 22.5 && deg >= 0.0)
-      t = "põhjast";
+      t = "põhja";
     else if (deg >= 22.5 && deg < 67.5)
-      t = "kirdest";
+      t = "kirde";
     else if (deg >= 67.5 && deg < 112.5)
-      t = "idast";
+      t = "ida";
     else if (deg >= 112.5 && deg < 157.5)
-      t = "kagust";
+      t = "kagu";
     else if (deg >= 157.5 && deg < 202.5)
-      t = "lõunast";
+      t = "lõuna";
     else if (deg >= 202.5 && deg < 247.5)
-      t = "edelast";
+      t = "edela";
     else if (deg >= 247.5 && deg < 292.5)
-      t = "läänest";
+      t = "lääne";
     else if (deg >= 292.5 && deg < 337.5)
-      t = "loodest";
+      t = "loode";
     return t;
   }
 function getIlmKirjeldus(ilm, index) {
