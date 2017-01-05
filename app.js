@@ -261,9 +261,19 @@ function receivedMessage(event) {
       kontrollLaused(messageText, senderID);
       check = true;
     }
-    if (messageText.match(/[Ll]inn\w*/)) {
+    // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
+    if (messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜa-zžšõäöü][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)) {
+      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];    
+      getLinnanimi(linn, senderID, function(cb) {
+        console.log("getLinnanimi callback: " + cb);
+        dict[senderID]['linn'] = cb;
+        getIlmateade(cb, uid, text);
+      });
+      check = true;
+    }
+    else if (messageText.match(/[Ll]inn\w*/)) {
       var str = messageText.match(/[Ll]inn\w*/);
-      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZÕÄÖÜ][a-zõäöü]+((( |-)[A-ZÕÄÖÜa-zõäöü][a-zõäöü]+)*( |-)[A-ZÕÄÖÜ][a-zõäöü]+)?/)[0];
+      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];
       dict[senderID]['linn'] = linn;
       //getIlmJSON(encodeURIComponent(linn), senderID);
       getIlmateade(linn, senderID, messageText);
@@ -285,7 +295,7 @@ function receivedMessage(event) {
   }
 }
 function getIlmateade(linn, uid, text) {
-  getIlmJSON(encodeURIComponent(linn), uid, function(cb) {
+  getIlmJSON(linn, uid, function(cb) {
     if (!cb || !cb['list']){
       if (dict[uid].x < 5){
         dict[uid].x += 1;
@@ -571,27 +581,59 @@ function getAegIndex(ilm, aeg) {
   }
   return 0;
 }
-function getIlmJSON(linn, uid, callback){
-        var apiKey = 'da4e1bd6fbe3a91e49486215b059c31a';
-        sendTypingOn(uid);
-        request('http://api.openweathermap.org/data/2.5/forecast/city?APPID='+ apiKey +'&q='+ linn +'&units=metric', getIlm);
-        function getIlm(err, response, body){
-          if(!err && response.statusCode < 400){
-            var retData = JSON.parse(body);
-            //console.log(retData);
-            dict[uid]['ilm'] = retData;
-            if (!retData)
-              sendTextMessage(uid, "Probleem");
-            else
-              callback(retData);
-            sendTypingOff(uid);
-          }
-          else{
-            console.log(err);
-            console.log(response.statusCode);
-          }
+function getLinnanimi(linn, uid, callback) {
+  sendTypingOn(uid);
+  var encodedLinn = encodeURIComponent(linn);
+  request('http://prog.keeleressursid.ee/ws_etmrf/lemma.php?s=' + encodedLinn, getLemma);
+  function getLemma(err, res, body) {
+    if(!err && res.statusCode < 400){
+      var retData = JSON.parse(body);
+      var nimi;
+      if (!retData)
+        nimi = linn;
+      else
+        nimi = retData['root'];  // käändes, siis tagastame tüve
+      request('https://glosbe.com/gapi/translate?from=est&dest=eng&format=json&phrase=' + encodeURIComponent(nimi), getTranslation);
+      function getTranslation(err, res, body) {
+        if(!err && res.statusCode < 400){
+          var retData = JSON.parse(body);
+          var nimi;
+          if (retData['tuc'].length > 0)
+            callback(retData['tuc'][0]['phrase']['text'])
+          else
+            callback(retData['phrase']);
+          sendTypingOff(uid);
         }
-      };
+      }
+    }
+    else{
+      console.log(err);
+      console.log(res.statusCode);
+    }    
+  }
+}
+function getIlmJSON(linn, uid, callback){
+  var encodedLinn = encodeURIComponent(linn);
+  var apiKey = 'da4e1bd6fbe3a91e49486215b059c31a';
+  sendTypingOn(uid);
+  request('http://api.openweathermap.org/data/2.5/forecast/city?APPID='+ apiKey +'&q='+ encodedLinn +'&units=metric', getIlm);
+  function getIlm(err, response, body){
+    if(!err && response.statusCode < 400){
+      var retData = JSON.parse(body);
+      //console.log(retData);
+      dict[uid]['ilm'] = retData;
+      if (!retData)
+        sendTextMessage(uid, "Probleem");
+      else
+        callback(retData);
+      sendTypingOff(uid);
+    }
+    else{
+      console.log(err);
+      console.log(response.statusCode);
+    }
+  }
+}
 /*
  * Delivery Confirmation Event
  *
