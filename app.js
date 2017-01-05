@@ -251,15 +251,15 @@ function receivedMessage(event) {
     return;
   }
   var response = "Huh?";
-  var check = false;
+  var linnaPattern = /[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜa-zžšõäöü][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/;
   if (messageText) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/)) {
       sendTextMessage(senderID, "Tere!\nKüsi minult ilma kohta Eesti asulates ja linnades. Tean öelda ilma nii tänase, homse kui ka ülehomse kohta." );
       check = true;
     }
     // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
-    if (messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜa-zžšõäöü][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)) {
-      var linn = messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];    
+    if (messageText.substring(1).match(linnaPattern)) {
+      var linn = messageText.substring(1).match(linnaPattern)[0];    
       getLinnanimi(linn, senderID, function(cb) {
         console.log("getLinnanimi callback: " + cb);
         dict[senderID]['linn'] = linn;
@@ -270,35 +270,16 @@ function receivedMessage(event) {
     }
     else if(dict[senderID]['linn'] != undefined){
       kontrollLaused(messageText, senderID);
-      check = true;
     }
     if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
       sendTextMessage(senderID, "Nägemist!");
-      check = true;
     }
     if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
       sendTextMessage(senderID, "Pole tänu väärt, aitan alati");
-      check = true;
     }
-    // else if (messageText.match(/[Ll]inn\w*/)) {
-    //   var str = messageText.match(/[Ll]inn\w*/);
-    //   var linn = messageText.substring(str.index + str[0].length).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];
-    //   dict[senderID]['linn'] = linn;
-    //   //getIlmJSON(encodeURIComponent(linn), senderID);
-    //   getIlmateade(linn, senderID, messageText);
-
-    //   check = true;
-    // }
-    if (!check) {
-      response = "Märksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
-      //sendTextMessage(senderID, response);
-      response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul. ";
-      sendTextMessage(senderID, response);
-    }
-    check = false;
 
   } else if (messageAttachments) {
-    sendTypingOff(senderID);
+    sendTextMessage(senderID, "Mulle ei tasu midagi saata. Küsi parem ilma kohta.");
   }
 }
 function getIlmateade(orig, linn, uid, text) {
@@ -410,7 +391,8 @@ function kontrollLaused(messageText, senderID) {
       }
     }
     if (response == 'Ma ei saa teist aru')
-      response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
+      response += "\nMärksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
+      response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
     sendTextMessage(senderID, response);
 }
 function getYldineIlm(ilm, linn, aeg, uid) {
