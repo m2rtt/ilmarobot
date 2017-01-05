@@ -263,7 +263,7 @@ function receivedMessage(event) {
     }
     // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
     if (messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜa-zžšõäöü][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)) {
-      var linn = messageText.substring(str.index + str[0].length).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];    
+      var linn = messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];    
       getLinnanimi(linn, senderID, function(cb) {
         console.log("getLinnanimi callback: " + cb);
         dict[senderID]['linn'] = cb;
