@@ -255,6 +255,12 @@ function receivedMessage(event) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/)) {
       sendTextMessage(senderID, "Tere!\nKüsi minult ilma kohta Eesti asulates ja linnades. Tean öelda ilma nii tänase, homse kui ka ülehomse kohta." );
     }
+    else if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
+      sendTextMessage(senderID, "Nägemist!");
+    }
+    else if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
+      sendTextMessage(senderID, "Pole tänu väärt, aitan alati");
+    }
     // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
     else if (messageText.substring(1).match(linnaPattern)) {
       var linn = messageText.substring(1).match(linnaPattern)[0];    
@@ -266,12 +272,6 @@ function receivedMessage(event) {
     }
     else if(dict[senderID]['linn'] != undefined){
       kontrollLaused(messageText, senderID, false);
-    }
-    else if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
-      sendTextMessage(senderID, "Nägemist!");
-    }
-    else if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
-      sendTextMessage(senderID, "Pole tänu väärt, aitan alati");
     }
     else{
       var response = "Ma ei saa teist hästi aru.\n";
