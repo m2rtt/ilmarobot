@@ -491,7 +491,7 @@ function getTuulesuund(deg) {
       t = "loode";
     return t;
   }
-function getIlmKirjeldus(linn ilm, index) {
+function getIlmKirjeldus(linn, ilm, index) {
   var desc = ilm['list'][index]['weather'][0]['main']
     if (desc == "Thunderstorm")
         return "on " + linn +" äike";
