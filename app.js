@@ -277,7 +277,7 @@ function receivedMessage(event) {
       check = true;
     }
     if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
-      sendTextMessage(senderID, "Pole tänu väärt, aitan alati")´;
+      sendTextMessage(senderID, "Pole tänu väärt, aitan alati");
       check = true;
     }
     // else if (messageText.match(/[Ll]inn\w*/)) {
@@ -479,24 +479,24 @@ function getTuulText(linn, ilm, viimane, aeg, uid){
 }
 function getTuulesuund(deg) {
   var t = "";
-    if (deg >= 337.5 && deg <= 360.0 || deg < 22.5 && deg >= 0.0)
-      t = "põhja";
-    else if (deg >= 22.5 && deg < 67.5)
-      t = "kirde";
-    else if (deg >= 67.5 && deg < 112.5)
-      t = "ida";
-    else if (deg >= 112.5 && deg < 157.5)
-      t = "kagu";
-    else if (deg >= 157.5 && deg < 202.5)
-      t = "lõuna";
-    else if (deg >= 202.5 && deg < 247.5)
-      t = "edela";
-    else if (deg >= 247.5 && deg < 292.5)
-      t = "lääne";
-    else if (deg >= 292.5 && deg < 337.5)
-      t = "loode";
-    return t;
-  }
+  if (deg >= 337.5 && deg <= 360.0 || deg < 22.5 && deg >= 0.0)
+    t = "põhja";
+  else if (deg >= 22.5 && deg < 67.5)
+    t = "kirde";
+  else if (deg >= 67.5 && deg < 112.5)
+    t = "ida";
+  else if (deg >= 112.5 && deg < 157.5)
+    t = "kagu";
+  else if (deg >= 157.5 && deg < 202.5)
+    t = "lõuna";
+  else if (deg >= 202.5 && deg < 247.5)
+    t = "edela";
+  else if (deg >= 247.5 && deg < 292.5)
+    t = "lääne";
+  else if (deg >= 292.5 && deg < 337.5)
+    t = "loode";
+  return t;
+}
 function getIlmKirjeldus(linn, ilm, index) {
   var desc = ilm['list'][index]['weather'][0]['main']
     if (desc == "Thunderstorm")
