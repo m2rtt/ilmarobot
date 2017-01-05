@@ -305,14 +305,14 @@ function getIlmateade(orig, linn, uid, text, linnChanged) {
 function kontrollLaused(messageText, senderID, linnChanged) {
   var response = 'Ma ei saa teist aru'; 
   var check = false;
-      if (messageText.match(/ilm.*/,i)) {
+      if (messageText.match(/ilm.*/i)) {
       dict[senderID]['viimane'] = 'ilm';
       if (dict[senderID]['linn'] == undefined)
         response = "Täpsustage linna nimi.";
       else
         response = getIlmText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['aeg'])
     }
-    if (messageText.match(/(õhu)?niiskus.*/,i)) {
+    if (messageText.match(/(õhu)?niiskus.*/i)) {
       dict[senderID]['viimane'] = 'õhuniiskus';
       if (dict[senderID]['linn'] == undefined)
         response = "Täpsustage linna nimi.";
@@ -321,7 +321,7 @@ function kontrollLaused(messageText, senderID, linnChanged) {
                     dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['humidity'],
                     dict[senderID]['aeg']);    
     }
-    if (messageText.match(/temperatuur|kraad|sooja|külm.*|soe/,i)) {
+    if (messageText.match(/temperatuur|kraad|sooja|külm.*|soe/i)) {
       dict[senderID]['viimane'] = 'temperatuur';
       if (dict[senderID]['linn'] == undefined)
         response = "Täpsustage linna nimi.";
@@ -330,7 +330,7 @@ function kontrollLaused(messageText, senderID, linnChanged) {
                     dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['temp'],
                     dict[senderID]['aeg']);        
     }
-    if (messageText.match(/(õhu)?rõhk/,i)) {
+    if (messageText.match(/(õhu)?rõhk/i)) {
       dict[senderID]['viimane'] = 'õhurõhk';
       if (dict[senderID]['linn'] == undefined)
         response = "Täpsustage linna nimi.";
@@ -339,53 +339,53 @@ function kontrollLaused(messageText, senderID, linnChanged) {
                     dict[senderID]['ilm']['list'][getAegIndex(dict[senderID]['ilm'], dict[senderID]['aeg'])]['main']['pressure'],
                     dict[senderID]['aeg']);    
     }
-    if (messageText.match(/tuul/,i)) {
+    if (messageText.match(/tuul/i)) {
       dict[senderID]['viimane'] = 'tuul';
-      if (messageText.match(/suun.*/,i)) {
+      if (messageText.match(/suun.*/i)) {
         dict[senderID]['viimane'] = 'tuulesuund';
-        if (messageText.match(/kiirus|kiire/,i))
+        if (messageText.match(/kiirus|kiire/i))
           dict[senderID]['viimane'] = 'tuul';
       }
-      if (messageText.match(/kiirus|kiire/,i) && !messageText.match(/suun.*/,i))
+      if (messageText.match(/kiirus|kiire/i) && !messageText.match(/suun.*/i))
         dict[senderID]['viimane'] = 'tuulekiirus';
       if (dict[senderID]['linn'] == undefined)
         response = "Täpsustage linna nimi."
       else
         response = getTuulText(dict[senderID]['linn'], dict[senderID]['ilm'], dict[senderID]['viimane'], dict[senderID]['aeg'], senderID)
     }
-    if (messageText.match(/täna|hetkel|praegu|nüüd/,i)) {
+    if (messageText.match(/täna|hetkel|praegu|nüüd/i)) {
       dict[senderID]['aeg'] = 'hetkel';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
       }
     }
-    if (messageText.match(/õhtu|öö/,i)) {
+    if (messageText.match(/õhtu|öö/i)) {
       dict[senderID]['aeg'] = 'õhtu';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
       }
     }
-    if (messageText.match(/lõuna|päev/,i)) {
+    if (messageText.match(/lõuna|päev/i)) {
       dict[senderID]['aeg'] = 'päev';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
       }
     }
-    if (messageText.match(/homme|homne/,i)) {
+    if (messageText.match(/homme|homne/i)) {
       dict[senderID]['aeg'] = 'hommepäev';
-      if (messageText.match(/hommik/,i))
+      if (messageText.match(/hommik/i))
         dict[senderID]['aeg'] = 'hommehommik';
-      if (messageText.match(/õhtu|öö/,i))
+      if (messageText.match(/õhtu|öö/i))
         dict[senderID]['aeg'] = 'hommeõhtu';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
       }
     }
-    if (messageText.match(/üle(homme|homne)/,i)) {
+    if (messageText.match(/üle(homme|homne)/i)) {
       dict[senderID]['aeg'] = 'ülehommepäev';
-      if (messageText.match(/hommik/,i))
+      if (messageText.match(/hommik/i))
         dict[senderID]['aeg'] = 'ülehommehommik';
-      if (messageText.match(/õhtu|öö/,i))
+      if (messageText.match(/õhtu|öö/i))
         dict[senderID]['aeg'] = 'ülehommeõhtu';
       if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined){
         response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
