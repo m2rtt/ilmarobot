@@ -250,7 +250,6 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
-  var response = "Huh?";
   var linnaPattern = /[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜa-zžšõäöü][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/;
   if (messageText) {
     if (messageText.match(/[tT]ere|[Hh]ei|[Tt]sau|[Tt]erv/)) {
@@ -273,6 +272,12 @@ function receivedMessage(event) {
     }
     if (messageText.match(/[Aa]itäh|[Tt]änan|[Tt]änud/)) {
       sendTextMessage(senderID, "Pole tänu väärt, aitan alati");
+    }
+    else{
+      response = "Ma ei saa teist hästi aru.\n";
+      response += "\nMärksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
+      response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
+      sendTextMessage(senderID, response);
     }
 
   } else if (messageAttachments) {
