@@ -439,7 +439,7 @@ function getIlmText(linn, ilm, aeg) {
     t == " ";
   else
     t = " " + getIlmKirjeldus(linn, ilm, i) + ", "
-  return getAegText(aeg) + " " + t + tText + " on " + Math.abs(temp) + " kraadi, puhub " + getTuulesuund(tuulesuund) + "tuul kiirusega " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
+  return getAegText(aeg) + t + tText + " on " + Math.abs(temp) + " kraadi, puhub " + getTuulesuund(tuulesuund) + "tuul kiirusega " + kiirus + " m/s, õhurõhk on " + pressure + " hPa ja õhuniiskus " + niiskus + "%";  
 }
 function getÕhuniiskusText(linn, niiskus, aeg) {
   return linn + " on " + getAegText(aeg).toLowerCase() + " õhuniiskust " + niiskus + "%";
