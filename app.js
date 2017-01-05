@@ -257,10 +257,6 @@ function receivedMessage(event) {
       sendTextMessage(senderID, "Tere!\nKüsi minult ilma kohta Eesti asulates ja linnades. Tean öelda ilma nii tänase, homse kui ka ülehomse kohta." );
       check = true;
     }
-    if(dict[senderID]['linn'] != undefined && !messageText.match(/[Ll]inn\w*/)){
-      kontrollLaused(messageText, senderID);
-      check = true;
-    }
     // eemaldame esimese tähe, sest lause algus. Eeldame, et linna nime lause alguses ei kasutata.
     if (messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜa-zžšõäöü][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)) {
       var linn = messageText.substring(1).match(/[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+((( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)*( |-)[A-ZŽŠÕÄÖÜ][a-zžšõäöü]+)?/)[0];    
@@ -270,6 +266,10 @@ function receivedMessage(event) {
         getIlmateade(linn, cb, senderID, messageText);
       });
 
+      check = true;
+    }
+    else if(dict[senderID]['linn'] != undefined){
+      kontrollLaused(messageText, senderID);
       check = true;
     }
     if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
