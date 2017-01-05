@@ -261,11 +261,11 @@ function receivedMessage(event) {
       getLinnanimi(linn, senderID, function(cb) {
         console.log("getLinnanimi callback: " + cb);
         dict[senderID]['linn'] = linn;
-        getIlmateade(linn, cb, senderID, messageText);
+        getIlmateade(linn, cb, senderID, messageText, true);
       });
     }
     else if(dict[senderID]['linn'] != undefined){
-      kontrollLaused(messageText, senderID);
+      kontrollLaused(messageText, senderID, false);
     }
     else if (messageText.match(/[Nn]ägemist|[Hh]ead aega|[Hh]üvasti/)) {
       sendTextMessage(senderID, "Nägemist!");
@@ -284,13 +284,13 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Mulle ei tasu midagi saata. Küsi parem ilma kohta.");
   }
 }
-function getIlmateade(orig, linn, uid, text) {
+function getIlmateade(orig, linn, uid, text, linnChanged) {
   getIlmJSON(linn, uid, function(cb) {
     if (!cb || !cb['list']){
       if (dict[uid].x < 5){
         dict[uid].x += 1;
         console.log("ilmateate hankimine vigane");
-        getIlmateade(orig, linn, uid, text);
+        getIlmateade(orig, linn, uid, text, linnChanged);
       } else {
         dict[uid].x = 0;
         sendTextMessage(uid, "Ilmateadet ei suutnud hankida. Proovige uuesti või veenduge, et linna nimi on korrektne.");
@@ -298,11 +298,11 @@ function getIlmateade(orig, linn, uid, text) {
     }
     else{
       dict[uid]['ilm'] = cb;
-      kontrollLaused(text, uid);
+      kontrollLaused(text, uid, linnChanged);
     }
   });
 }
-function kontrollLaused(messageText, senderID) {
+function kontrollLaused(messageText, senderID, linnChanged) {
   var response = 'Ma ei saa teist aru'; 
   var check = false;
       if (messageText.match(/ilm/)) {
@@ -392,7 +392,7 @@ function kontrollLaused(messageText, senderID) {
         check = true;
       }
     }
-    if (response == 'Ma ei saa teist aru'){
+    if (response == 'Ma ei saa teist aru' && !linnChanged){
       response += "\nMärksõnu, mida ära tunnen: temperatuur, õhurõhk, õhuniiskus, tuulesuund, tuulekiirus, tuul. \n";
       response += "Oskan vastata ka ilma kohta homme või ülehomme hommikul, päeval, õhtul.";
     }
