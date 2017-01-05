@@ -267,7 +267,7 @@ function receivedMessage(event) {
       getLinnanimi(linn, senderID, function(cb) {
         console.log("getLinnanimi callback: " + cb);
         dict[senderID]['linn'] = cb;
-        getIlmateade(cb, uid, text);
+        getIlmateade(cb, senderID, messageText);
       });
       check = true;
     }
