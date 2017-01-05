@@ -457,7 +457,7 @@ function getTemperatuurText(linn, temp, aeg) {
     t = "sooja";
   else
     t = "külma";
-  return linn + " on " + getAegText(aeg).toLowerCase() + Math.abs(temp) + " kraadi " + t;
+  return linn + " on " + getAegText(aeg).toLowerCase() + " " + Math.abs(temp) + " kraadi " + t;
 }
     
 function getÕhurõhkText(linn, pressure, aeg) {
