@@ -1,7 +1,7 @@
 {
-  "name": "messenger-get-started",
+  "name": "ilmarobot",
   "version": "1.0.0",
-  "description": "Get started example for Messenger Platform",
+  "description": "Ilmarobot",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,16 +10,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fbsamples/messenger-platform-samples.git"
+    "url": "https://github.com/m2rtt/ilmarobot.git"
   },
-  "author": "Facebook",
+  "author": "Facebook, Märt Sessman",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.0",
     "config": "^1.20.4",
     "ejs": "^2.4.2",
     "express": "^4.13.4",
-    "request": "^2.72.0"
+    "iconv-lite": "^0.4.17",
+    "request": "^2.72.0",
+    "xml2js": "^0.4.17"
   },
   "engines": {
     "node": "~4.1.2"
