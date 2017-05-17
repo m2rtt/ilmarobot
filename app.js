@@ -284,7 +284,7 @@ function receivedMessage(event) {
 function getIlmateade(orig, linn, uid, text, linnChanged) {
     getIlmJSON(linn, uid, function(cb) {
         console.log('getIlmateade callback:');
-        console.log(cb);
+        console.log(cb['list'], !cb, !cb.list);
         if (!cb || !cb['list']) {
             if (dict[uid].x < 5) {
                 dict[uid].x += 1;
