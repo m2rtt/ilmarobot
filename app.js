@@ -360,6 +360,7 @@ function kontrollLaused(messageText, senderID, linnChanged) {
     }
     if (messageText.match(/õhtu|öö/i)) {
         dict[senderID]['aeg'] = 'õhtu';
+        console.log('õhtu!');
         if (dict[senderID]['linn'] != undefined && dict[senderID]['ilm'] != undefined) {
             response = getYldineIlm(dict[senderID]['ilm'], dict[senderID]['linn'], dict[senderID]['aeg'], senderID);
         }
@@ -517,15 +518,15 @@ function getAegText(aeg) {
     var date = new Date();
     if (aeg == "hetkel")
         at = "Hetkel";
-    else if (aeg == "päev")
+    else if (aeg == "päev") {
         at = "Täna päeval";
-    if (date.getHours() >= 15)
-        at = "Hetkel";
-    else if (aeg == "õhtu")
+        if (date.getHours() >= 15)
+            at = "Hetkel";
+    } else if (aeg == "õhtu") {
         at = "Täna õhtul";
-    if (date.getHours() >= 21)
-        at = "Hetkel";
-    else if (aeg == "hommehommik")
+        if (date.getHours() >= 21)
+            at = "Hetkel";
+    } else if (aeg == "hommehommik")
         at = "Homme hommikul";
     else if (aeg == "hommepäev")
         at = "Homme päeval";
