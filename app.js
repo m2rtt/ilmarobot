@@ -290,7 +290,7 @@ function getIlmateade(orig, linn, uid, text, linnChanged) {
                 getIlmateade(orig, linn, uid, text, linnChanged);
             } else {
                 dict[uid].x = 0;
-                sendTextMessage(uid, "Ilmateadet ei suutnud hankida. Proovige uuesti või veenduge, et linna nimi on korrektne.");
+                sendTextMessage(uid, "Ilmateadet ei suutnud hankida. Veenduge, et linna nimi on õige.");
             }
         } else {
             dict[uid]['ilm'] = cb;
@@ -631,15 +631,14 @@ function getIlmJSON(linn, uid, callback) {
     //var parser = new xml2js.Parser();
     sendTypingOn(uid);
     request('http://api.openweathermap.org/data/2.5/forecast?APPID=' + apiKey + '&q=' + encodedLinn + '&units=metric', getIlm);
-    //request('http://www.ilmateenistus.ee/ilma_andmed/xml/forecast.php', getIlm);
 
     function getIlm(err, response, body) {
-        var retData = undefined;
         if (!err && response.statusCode < 400) {
-            retData = body;
+            var retData = body;
+            console.log(body);
             dict[uid]['ilm'] = retData;
             if (!retData)
-                sendTextMessage(uid, "Probleem");
+                sendTextMessage(uid, "Probleem ilmateate hankimisega :(");
             else
                 callback(retData);
             sendTypingOff(uid);
