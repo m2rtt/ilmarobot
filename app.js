@@ -284,7 +284,7 @@ function receivedMessage(event) {
 function getIlmateade(orig, linn, uid, text, linnChanged) {
     getIlmJSON(linn, uid, function(cb) {
         console.log('getIlmateade callback:');
-        console.log(cb, cb['cod']);
+        console.log(!cb, !cb['list']);
         if (!cb || !cb['list']) {
             if (dict[uid].x < 5) {
                 dict[uid].x += 1;
@@ -636,6 +636,7 @@ function getIlmJSON(linn, uid, callback) {
 
     function getIlm(err, response, body) {
         if (!err && response.statusCode < 400) {
+            body = JSON.parse(body);
             dict[uid]['ilm'] = body;
             if (!body)
                 sendTextMessage(uid, "Probleem ilmateate hankimisega :(");
