@@ -18,8 +18,7 @@ const
     crypto = require('crypto'),
     express = require('express'),
     https = require('https'),
-    request = require('request'),
-    xml2js = require('xml2js');
+    request = require('request');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -635,14 +634,9 @@ function getIlmJSON(linn, uid, callback) {
     //request('http://www.ilmateenistus.ee/ilma_andmed/xml/forecast.php', getIlm);
 
     function getIlm(err, response, body) {
-        var retData;
+        var retData = undefined;
         if (!err && response.statusCode < 400) {
-            parser.parseString(data, function(err, result) {
-                retData = result;
-                console.log('Done');
-            });
-
-            console.log(retData);
+            retData = body;
             dict[uid]['ilm'] = retData;
             if (!retData)
                 sendTextMessage(uid, "Probleem");
